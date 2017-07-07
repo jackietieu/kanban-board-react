@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import Column from './Column.jsx';
 import Card from './Card.jsx';
 import './App.css';
@@ -27,20 +26,15 @@ class App extends Component {
         ]
       ]
     }
-
     this.state.cards = this.createCards();
   }
 
   createCards() {
-    return this.state.cache.map((column, col) => {
-      return column.map((cardProps, i) => (
+    return this.state.cache.map((column, col) => (
+      column.map((cardProps, i) => (
         <Card idx={i} col={col} content={cardProps.content} key={`${col}${i}`} moveCard={this.moveCard.bind(this)} />
       ))
-    })
-  }
-
-  setCache() {
-    window.localStorage.setItem('cards', JSON.stringify(this.state.cards));
+    ))
   }
 
   updateCards(col) {
@@ -77,12 +71,10 @@ class App extends Component {
   }
 
   moveCard(fromCol, toCol, idx) {
-    let cardToMove = this.state.cards[fromCol][idx],
-        newCards = this.state.cards.slice(),
+    let newCards = this.state.cards.slice(),
         newCache = this.state.cache.slice();
 
-    newCards[toCol].push(cardToMove);
-    newCards[fromCol] = newCards[fromCol].slice(0, idx).concat(newCards[fromCol].slice(idx + 1));
+    newCards[toCol].push(newCards[fromCol].splice(idx, 1)[0]);
     newCache[toCol].push(newCache[fromCol].splice(idx, 1)[0]);
     this.setState({
       cards: newCards,
